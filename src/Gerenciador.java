@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Gerenciador {
@@ -22,8 +23,14 @@ public class Gerenciador {
 
         Scanner sc = new Scanner(System.in);
         System.out.print("Digite a descrição da tarefa: ");
-        tarefa.setDescricao(sc.nextLine());
+        String descricao = sc.nextLine().trim();
 
+        if (descricao.isEmpty()){
+            System.out.println("ERRO: a descrição da tarefa não pode ficar vazia!");
+            return;
+        }
+
+        tarefa.setDescricao(descricao);
         listaDeTarefas.add(tarefa);
         System.out.println("Tarefa adicionada com sucesso!");
     }
@@ -39,25 +46,46 @@ public class Gerenciador {
     }
 
     public void marcarComoConcluida(int id) {
-        for (Tarefas tarefa : listaDeTarefas) {
-            if (tarefa.getId() == id) {
-                tarefa.setStatus("Concluída");
-                System.out.printf("Tarefa %d marcada como concluída%n", tarefa.getId());
-                return;
+        try {
+            boolean tarefaEncontrada = false;
+
+            for (Tarefas tarefa : listaDeTarefas) {
+                if (tarefa.getId() == id) {
+                    tarefa.setStatus("Concluída");
+                    System.out.printf("Tarefa %d marcada como concluída%n", tarefa.getId());
+                    tarefaEncontrada = true;
+                    break;
+                }
             }
+            verificarTarefaEncontrada(tarefaEncontrada);
+
+        } catch (TarefaNaoEncontradaException e) {
+            System.out.println(e.getMessage());
         }
-        System.out.println("A tarefa não existe.");
     }
 
     public void excluirTarefa(int id) {
-
-        for (Tarefas tarefa : listaDeTarefas) {
-            if (tarefa.getId() == id) {
-                listaDeTarefas.remove(tarefa);
-                System.out.printf("Tarefa com id %d apagada.", tarefa.getId());
-                break;
+        try {
+            boolean tarefaEncontrada = false;
+            for (Tarefas tarefa : listaDeTarefas) {
+                if (tarefa.getId() == id) {
+                    listaDeTarefas.remove(tarefa);
+                    System.out.printf("Tarefa com id %d apagada.", tarefa.getId());
+                    tarefaEncontrada = true;
+                    break;
+                }
             }
+            verificarTarefaEncontrada(tarefaEncontrada);
+
+        } catch (TarefaNaoEncontradaException e) {
+            System.out.print(e.getMessage());
         }
-        System.out.println("A tarefa não existe.");
+    }
+
+    private void verificarTarefaEncontrada(boolean tarefaEncontrada) throws TarefaNaoEncontradaException {
+        if (!tarefaEncontrada) {
+            throw new TarefaNaoEncontradaException("A tarefa não foi encontrada!");
+
+        }
     }
 }
