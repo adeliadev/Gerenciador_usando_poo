@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Gerenciador {
     ArrayList<Tarefas> listaDeTarefas;
@@ -18,7 +19,11 @@ public class Gerenciador {
 
     public void adicionarTarefa() {
         Tarefas tarefa = new Tarefas();
-        tarefa.criarTarefa();
+
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Digite a descrição da tarefa: ");
+        tarefa.setDescricao(sc.nextLine());
+
         listaDeTarefas.add(tarefa);
         System.out.println("Tarefa adicionada com sucesso!");
     }
@@ -36,7 +41,7 @@ public class Gerenciador {
     public void marcarComoConcluida(int id) {
         for (Tarefas tarefa : listaDeTarefas) {
             if (tarefa.getId() == id) {
-                tarefa.marcarComoConcluido();
+                tarefa.setStatus("Concluída");
                 System.out.printf("Tarefa %d marcada como concluída%n", tarefa.getId());
                 return;
             }

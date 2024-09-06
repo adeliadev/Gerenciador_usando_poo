@@ -37,17 +37,4 @@ public class Tarefas {
         this.status = status;
     }
 
-    //Métodos da classe
-
-    public void criarTarefa(){
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Digite a descrição da tarefa: ");
-        setDescricao(sc.nextLine());
-    }
-
-    public void marcarComoConcluido(){
-        setStatus("Concluída");
-    }
-
-
 }
